@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notify Site</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Notificação Personalizada</h1>
+    <form id="notifyForm">
+      <label for="title">Título:</label>
+      <input type="text" id="title" placeholder="Digite o título" required>
+
+      <label for="body">Mensagem:</label>
+      <textarea id="body" placeholder="Digite a mensagem" required></textarea>
+
+      <label for="icon">Ícone (URL da imagem):</label>
+      <input type="text" id="icon" placeholder="https://exemplo.com/icone.png">
+
+      <button type="submit">Enviar Notificação</button>
+    </form>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
