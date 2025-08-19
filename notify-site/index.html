@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Notificações Personalizadas</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0ea5e9">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui'] }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800">
+  <header class="sticky top-0 z-30 bg-white/80 backdrop-blur border-b border-slate-200">
+    <div class="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
+      <h1 class="text-xl sm:text-2xl font-bold">🔔 Notificações Personalizadas</h1>
+      <div class="flex gap-2">
+        <button id="btn-permission" class="px-4 py-2 rounded-2xl bg-sky-600 text-white hover:bg-sky-700 transition">
+          Ativar Permissão
+        </button>
+        <a href="manifest.json" class="px-4 py-2 rounded-2xl border border-slate-300 hover:bg-slate-100">Manifest</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-4 py-8 grid md:grid-cols-2 gap-8">
+    <!-- Configurator -->
+    <section class="bg-white rounded-2xl shadow p-6 space-y-5">
+      <h2 class="text-lg font-semibold">Configurar Notificação</h2>
+      <div class="grid gap-4">
+        <div>
+          <label class="block text-sm font-medium mb-1">Título</label>
+          <input id="title" class="w-full rounded-xl border-slate-300 focus:border-sky-500 focus:ring-sky-500" placeholder="Ex: Pagamento Recebido">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1">Mensagem</label>
+          <textarea id="body" rows="3" class="w-full rounded-xl border-slate-300 focus:border-sky-500 focus:ring-sky-500" placeholder="Ex: Você recebeu R$ 150,00 de João"></textarea>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium mb-1">Ícone (URL)</label>
+            <input id="iconUrl" type="url" class="w-full rounded-xl border-slate-300 focus:border-sky-500 focus:ring-sky-500" placeholder="https://.../icone.png">
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">OU enviar ícone (PNG/JPG)</label>
+            <input id="iconFile" type="file" accept="image/*" class="w-full">
+          </div>
+        </div>
+        <div class="grid sm:grid-cols-3 gap-4">
+          <div>
+            <label class="block text-sm font-medium mb-1">Atraso (ms)</label>
+            <input id="delay" type="number" min="0" value="0" class="w-full rounded-xl border-slate-300 focus:border-sky-500 focus:ring-sky-500">
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">Badge (opcional URL)</label>
+            <input id="badge" type="url" class="w-full rounded-xl border-slate-300 focus:border-sky-500 focus:ring-sky-500" placeholder="https://.../badge.png">
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">Tag (agrupar)</label>
+            <input id="tag" class="w-full rounded-xl border-slate-300 focus:border-sky-500 focus:ring-sky-500" placeholder="ex: transacao">
+          </div>
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div class="flex items-center gap-2">
+            <input id="silent" type="checkbox" class="rounded">
+            <label for="silent" class="text-sm">Silenciosa</label>
+          </div>
+          <div class="flex items-center gap-2">
+            <input id="requireInteraction" type="checkbox" class="rounded">
+            <label for="requireInteraction" class="text-sm">Pedir interação (não some sozinho)</label>
+          </div>
+        </div>
+
+        <div class="flex gap-3 pt-2">
+          <button id="btn-preview" class="px-4 py-2 rounded-2xl border border-slate-300 hover:bg-slate-100">Pré-visualizar</button>
+          <button id="btn-notify" class="px-4 py-2 rounded-2xl bg-emerald-600 text-white hover:bg-emerald-700">Enviar Notificação</button>
+          <button id="btn-clear" class="px-4 py-2 rounded-2xl bg-slate-100 hover:bg-slate-200">Limpar</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Preview + Log -->
+    <section class="space-y-6">
+      <div class="bg-white rounded-2xl shadow p-6">
+        <h2 class="text-lg font-semibold mb-4">Pré-visualização</h2>
+        <div id="preview" class="flex items-center gap-4 border rounded-2xl p-4">
+          <img id="previewIcon" src="assets/default-icon.png" alt="Ícone" class="w-14 h-14 rounded-xl object-cover">
+          <div>
+            <div id="previewTitle" class="font-semibold">Título da Notificação</div>
+            <div id="previewBody" class="text-slate-600">Mensagem da notificação aparecerá aqui.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl shadow p-6">
+        <h2 class="text-lg font-semibold mb-4">Log</h2>
+        <div id="log" class="text-sm space-y-2 max-h-64 overflow-auto"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="max-w-5xl mx-auto px-4 pb-8 text-center text-sm text-slate-500">
+    <p>Para receber notificações, autorize no navegador. Este site usa a API de Notificações (local) – sem servidor.</p>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
